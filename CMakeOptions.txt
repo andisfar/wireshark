@@ -119,11 +119,11 @@ option(ENABLE_LIBXML2    "Build with libxml2 support" ON)
 option(ENABLE_OPUS       "Build with opus support" ON)
 
 # How to install
-set(DUMPCAP_INSTALL_OPTION   "normal" CACHE STRING "Permissions to install")
+set(DUMPCAP_INSTALL_OPTION   "capabilities" CACHE STRING "Permissions to install")
 set_property(CACHE DUMPCAP_INSTALL_OPTION PROPERTY STRINGS "normal" "suid" "capabilities")
 
 if(UNIX)
-	option(ENABLE_DUMPCAP_GROUP "Install dumpcap with group ownership and permissions (default \"wireshark\")" OFF)
+	option(ENABLE_DUMPCAP_GROUP "Install dumpcap with group ownership and permissions (default \"wireshark\")" ON)
 	set(DUMPCAP_INSTALL_GROUP "wireshark" CACHE STRING "Group name for dumpcap (must exist)")
 endif()
 
