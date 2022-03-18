@@ -168,3 +168,9 @@ vgcore.*
 .pytest_cache/
 test/*.log
 *.code-workspace
+deps.list
+dep.providers
+vcs_version.h
+*.rpm
+build/
+rename.rpms

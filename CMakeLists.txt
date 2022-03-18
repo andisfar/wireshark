@@ -1205,7 +1205,7 @@ if(BUILD_wireshark)
 		Qt${qtver}Gui
 		Qt${qtver}LinguistTools
 		# Our code currently does not compile with Qt6Multimedia
-		# Qt${qtver}Multimedia
+		Qt${qtver}Multimedia
 		Qt${qtver}PrintSupport
 		Qt${qtver}Widgets
 	)
