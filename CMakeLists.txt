@@ -1179,7 +1179,7 @@ endfunction()
 macro(ws_find_package _package_name _enable_package _package_cmakedefine)
 	if(${_enable_package})
 		# Clear outdated cache variables if not already.
-		reset_find_package(${_package_name})
+		reset_find_package(${_package_name})		
 		find_package(${_package_name} ${ARGN})
 		if(${_package_name}_FOUND)
 			set(${_package_cmakedefine} 1)
@@ -1206,7 +1206,7 @@ find_program(LEX_EXECUTABLE REQUIRED
              NAMES
 	         win_flex.exe
              PATHS
-	         "E:\\Wireshark\\4.2.4-Libs\\wireshark-x64-libs-4.2\\win_flex_bison-master\\")
+	         "$ENV{WIRESHARK_BASE_DIR}/wireshark-x64-libs-4.2/win_flex_bison-master/")
 # message(FATAL_ERROR "flex: [${LEX_EXECUTABLE}]")
 find_package(Perl)
 find_package(PCRE2 REQUIRED)
@@ -2737,13 +2737,15 @@ if(BUILD_wireshark AND QT_FOUND)
 		${ZLIB_LIBRARIES}
 		${MINIZIP_LIBRARIES}
 	)
-	set(run_dir ${CMAKE_BINARY_DIR}/run CACHE PATH "run directory" FORCE)
-	get_target_property(Qt6WindeployQt Qt6::windeployqt LOCATION_<CONFIG>)
 	add_executable(wireshark WIN32 MACOSX_BUNDLE ${wireshark_FILES} ${EXTRA_WIRESHARK_BUNDLE_FILES})
-	add_custom_target(wireshark-post-depend ALL
-	    DEPENDS wireshark
-	    COMMAND ${Qt6WindeployQt} ${run_dir}/Wireshark.exe
-	    COMMAND ${Qt6WindeployQt} --list relative ${run_dir}/Wireshark.exe > ${run_dir}/wireshark.qt.deps)
+	if(TARGET Qt6::windeployqt AND BUILD_QtIfw AND WIN32)
+	    set(run_dir ${CMAKE_BINARY_DIR}/run CACHE PATH "run directory" FORCE)
+	    get_target_property(Qt6WindeployQt Qt6::windeployqt LOCATION_<CONFIG>)	    
+	    add_custom_target(wireshark-post-depend ALL
+		DEPENDS wireshark
+		COMMAND ${Qt6WindeployQt} ${run_dir}/Wireshark.exe
+		COMMAND ${Qt6WindeployQt} --list relative ${run_dir}/Wireshark.exe > ${run_dir}/wireshark.qt.deps)
+	endif()
 	if(MSVC)
 		set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT wireshark)
 	endif()
@@ -3403,7 +3405,7 @@ if(WIN32)
 	endif()
 endif()
 
-if(BUILD_QtIfw)
+if(BUILD_QtIfw AND WIN32)    
     include(InstallRequiredSystemLibraries)
     set(CPACK_GENERATOR "IFW")
     set(CPACK_IFW_ROOT "C:/Qt/Tools/QtInstallerFramework/4.7/")
